@@ -1,0 +1,18 @@
+
+from numpy import where
+from collections import Counter
+from sklearn.datasets import make_classification
+from matplotlib import pyplot
+X, y = make_classification(n_samples=1000, n_features=4, n_informative=2,
+n_redundant=0, n_classes=3, n_clusters_per_class=1, weights=None,
+random_state=1)
+print(X.shape, y.shape)
+counter = Counter(y)
+print(counter)
+for i in range(10):
+ print(X[i], y[i])
+for label, _ in counter.items(): 
+ row_ix = where(y == label)[0]
+pyplot.scatter(X[row_ix, 0], X[row_ix, 1], label=str(label))
+pyplot.legend()
+pyplot.show()
