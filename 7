@@ -1,0 +1,33 @@
+#7
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+
+clf = KNeighborsClassifier(n_neighbors=3)  
+clf.fit(X_train, y_train)
+
+y_pred = clf.predict(X_test)
+
+cm = confusion_matrix(y_test, y_pred)
+print('Confusion matrix is as follows:\n', cm)
+print('Accuracy Metrics:')
+print(classification_report(y_test, y_pred))
+print("Correct predictions:", accuracy_score(y_test, y_pred))
+print("Wrong predictions:", (1 - accuracy_score(y_test, y_pred)))
+
+print("Predicted Data:")
+print(y_pred)
+print("Test data:")
+print(y_test)
+
+diff = y_pred - y_test
+print("Result is:")
+print(diff)
+print('Total number of samples misclassified =', sum(abs(diff)))
