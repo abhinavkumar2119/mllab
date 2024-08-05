@@ -1,0 +1,70 @@
+
+import pandas as pd
+import numpy as np
+
+df2 = pd.read_csv('lab4.csv', header=None)
+print(df2)
+
+X = np.array(df2.iloc[:, :-1])
+y = np.array(df2.iloc[:, -1])
+
+m, n = X.shape  
+
+def candi(X, y):
+    print("Initialization of specific_h and general_h")
+    specific_h = ['0'] * n
+    print("specific_h:", specific_h)
+
+    general_h = [['?' for _ in range(n)] for _ in range(n)]
+    print("general_h:", general_h)
+
+    for i in range(m):
+        if y[i] == "Yes":
+            for j in range(n):
+                if specific_h[j] != X[i][j]:
+                    if specific_h[j] == '0':
+                        specific_h[j] = X[i][j]
+                    else:
+                        specific_h[j] = '?'
+            print("Specific_h updated:", specific_h)
+
+            to_remove = []
+            for gh in general_h:
+                for j in range(n):
+                    if gh[j] != '?' and gh[j] != specific_h[j]:
+                        to_remove.append(gh)
+            for r in to_remove:
+                general_h.remove(r)
+
+        elif y[i] == "No":
+            print("\n - Negative training example:", X[i])
+
+            to_remove = []
+            for gh in general_h:
+                for j in range(n):
+                    if gh[j] != '?' and gh[j] == specific_h[j]:
+                        to_remove.append(gh)
+            for r in to_remove:
+                general_h.remove(r)
+
+            for j in range(n):
+                if specific_h[j] == '0':
+                    g_h = ['?' for _ in range(n)]
+                    g_h[j] = '?'
+                    general_h.append(g_h)
+                elif specific_h[j] != X[i][j]:
+                    g_h = ['?' for _ in range(n)]
+                    g_h[j] = specific_h[j]
+                    general_h.append(g_h)
+
+        print("General_h updated:", general_h)
+
+    return specific_h, general_h
+
+s_final, g_final = candi(X, y)
+
+print("\nFinal Specific_h:")
+print(s_final)
+
+print("\nFinal General_h:")
+print(g_final)
