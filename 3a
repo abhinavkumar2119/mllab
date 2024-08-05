@@ -1,0 +1,35 @@
+import pandas as pd
+import numpy as np
+df2 = pd.read_csv('lab3.csv')
+print(df2)
+print("\nThe most general hypothesis: ['?', '?', '?', '?', '?', '?']\n")
+print("\nThe most specific hypothesis: ['0', '0', '0', '0', '0', '0']\n")
+
+
+X = np.array(df2.iloc[:, :-1])  
+y = np.array(df2.iloc[:, -1])   
+
+print("\nFeatures (X):\n", X)
+print("\nTarget (y):\n", y)
+
+m, n = X.shape
+print("\nNumber of rows (m) and columns (n):", m, n)
+
+
+print("\nThe initial value of hypothesis:")
+hypothesis = ['0'] * n
+print(hypothesis)
+
+
+print("\nFind S: Finding a Maximally Specific Hypothesis\n")
+for i in range(m):
+    if y[i] == 'Yes':  
+        for j in range(n):
+            if hypothesis[j] == '0':
+                hypothesis[j] = X[i, j]
+            elif X[i, j] != hypothesis[j]:
+                hypothesis[j] = '?'
+    print(f"the hypothesis for training set {i + 1}: {hypothesis}")
+
+print("\nThe Maximally Specific Hypothesis for the given Training Examples:\n")
+print(hypothesis)
